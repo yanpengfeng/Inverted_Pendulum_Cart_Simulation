@@ -1,4 +1,5 @@
 function cot = compute_cot(avg_power, x_desired, t_settle,p)
+%输出加速度或者力
 
 %预期位置除以稳定时间得到速度
 speed = x_desired/t_settle(1); 
