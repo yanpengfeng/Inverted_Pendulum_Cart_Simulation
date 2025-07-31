@@ -1,5 +1,5 @@
 function avg_power = compute_avg_power(Uout, x_dot, p)
-
+%Uout为系统的输出，x_dot为系统位置，p为参数集
 N = length(Uout);
 current = zeros(N,1);
 power = zeros(N,1);
