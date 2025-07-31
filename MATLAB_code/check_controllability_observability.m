@@ -6,7 +6,7 @@ r = 1; % desired x_position
 p = get_parameters();
 p.flag_ctrl = 1;
 
-
+%调用函数来实现倒立摆数学模型
 [A,B,C,D] = compute_cart_pole_linear_system(X,r,p); % Obtain Linear System
 sys = ss(A,B,C,D)
 
