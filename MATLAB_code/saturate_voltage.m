@@ -1,5 +1,5 @@
 function r_new = saturate_voltage(input_voltage, p, K, Nbar, X)
-
+%电压限幅值，通过获得电压限幅得到系统所需要的参数，避免过高的系统参数输出
 voltage_soft_limit = p.voltage_soft_limit;
 ov_counter_limit = p.ov_counter_limit;
 ov_absolute_limit = p.ov_absolute_limit;
