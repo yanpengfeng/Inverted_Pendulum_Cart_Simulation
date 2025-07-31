@@ -1,4 +1,5 @@
 function [t_settle, t_rise, overshoot, steady_state_error] = analyze_response(tout, y, y_final, flag_step)
+%定义了函数名为analyze_response,输入参数为(tout,y,y_final,flag_step),输出参数为[t_settle,t_rise,overshoot,steady_state_error]
 % Compute step responses give time (tout), response (y), steady state
 % (y_final).数据理想位置
 % flag_step is 1 if the response is a step response.
