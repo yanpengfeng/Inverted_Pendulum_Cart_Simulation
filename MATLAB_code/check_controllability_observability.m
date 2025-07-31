@@ -14,6 +14,7 @@ sys = ss(A,B,C,D)
 Co = ctrb(A,B); % compute controllability matrix
 
 unco = length(X) - rank(Co); % number of uncontrollable states
+%运用x的长度减去可控性矩阵的秩来实现能控性判断
 
 if unco == 0
     disp('The System is controllable at equilibrium');
@@ -25,7 +26,7 @@ end
 Ob = obsv(A,C);
 
 unob = length(A) - rank(Ob);
-
+%运用A矩阵行列的最大值作为参数来减去能观性矩阵的秩来实现能观性判断
 if unob == 0
    disp('The System is observable at equilibrium');
 else
