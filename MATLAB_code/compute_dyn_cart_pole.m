@@ -13,6 +13,7 @@ global t_prev integral_term_1_prev integral_term_2_prev ov_counter
  
 %% Applying Controllers  
 if p.flag_ctrl == 0         %LQR
+    %设计一个lqr控制器来实现系统的输出，并计算反馈系数和其他参数
     [K, Nbar, r_new] = lqr_controller(X,x_desired,p);
     Ac = A - B*K;
     Bc = Nbar * B;
@@ -20,11 +21,13 @@ if p.flag_ctrl == 0         %LQR
     
     
 elseif p.flag_ctrl == 1     %PID
+    %设计一个pid控制器来控制被控对象，并获得参数
     u_pid = pid_controller(X,x_desired,t,p);
     dxdt = A * X + B * u_pid;
     
     
 elseif p.flag_ctrl == 2     %MPC
+    %设计一个mpc控制器来实现系统控制，并输出
     u_mpc = mpc_controller(X,x_desired,p);
     dxdt = A * X + B * u_mpc;
     
