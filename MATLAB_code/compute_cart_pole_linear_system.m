@@ -11,7 +11,7 @@ Rw = p.Rw;
 I_rotor = p.I_rotor;
 N_rotor = p.N_rotor;
 
-
+%理想角度和位置数据
 theta = X(2);
 x_dot = X(3);
 
