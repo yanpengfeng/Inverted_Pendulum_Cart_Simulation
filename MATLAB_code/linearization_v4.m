@@ -24,7 +24,7 @@ B_damp = [Kv*Kt/Rw*N_rotor^2    0;
 
         
 % Computing double derivative of q
-%计算q的双导数
+%计算q的双导数，计算方法存疑
 ddq = (De + J_rotor) \ (Be * u - Ce - B_damp * dq - Ge);
 
 
@@ -90,4 +90,5 @@ dxdt = q_eq + A_lin * (q - q_eq) + B_lin * (u - u_eq);
 %                                                                                                 (r*m*cos(theta))/(I_rotor*m*cos(theta)*N_rotor^2 + M + m - m*cos(theta)^2) - x*((r*Rw*m*sin(theta) + Rw*l*m*cos(theta) - Rw*g*m*cos(theta)^2 + Rw*g*m*sin(theta)^2 - Kt*Kv*N_rotor^2*m*x_dot*sin(theta))/(Rw*(I_rotor*m*cos(theta)*N_rotor^2 + M + m - m*cos(theta)^2)) + ((- I_rotor*m*sin(theta)*N_rotor^2 + 2*m*cos(theta)*sin(theta))*(- Kt*Kv*m*x_dot*cos(theta)*N_rotor^2 + r*Rw*m*cos(theta) - Rw*l*m*sin(theta) + Rw*g*m*cos(theta)*sin(theta)))/(Rw*(I_rotor*m*cos(theta)*N_rotor^2 + M + m - m*cos(theta)^2)^2)) - (Kt*Kv*N_rotor^2*m*x*cos(theta))/(Rw*(I_rotor*m*cos(theta)*N_rotor^2 + M + m - m*cos(theta)^2))
 %  x*((M*Rw*g*cos(theta) + Rw*g*m*cos(theta) - Rw*l*m*cos(theta)^2 + Rw*l*m*sin(theta)^2 + I_rotor*N_rotor^2*Rw*l*m*cos(theta))/(Rw*l*(I_rotor*m*cos(theta)*N_rotor^2 + M + m - m*cos(theta)^2)) - ((- I_rotor*m*sin(theta)*N_rotor^2 + 2*m*cos(theta)*sin(theta))*(r*M*Rw + r*Rw*m + M*Rw*g*sin(theta) + Rw*g*m*sin(theta) - Rw*l*m*cos(theta)*sin(theta) - Kt*Kv*M*N_rotor^2*x_dot - Kt*Kv*N_rotor^2*m*x_dot + I_rotor*N_rotor^2*Rw*l*m*sin(theta)))/(Rw*l*(I_rotor*m*cos(theta)*N_rotor^2 + M + m - m*cos(theta)^2)^2)) + (r*(Rw*m + M*Rw))/(Rw*l*(I_rotor*m*cos(theta)*N_rotor^2 + M + m - m*cos(theta)^2)) - (x*(Kt*Kv*N_rotor^2*m + Kt*Kv*M*N_rotor^2))/(Rw*l*(I_rotor*m*cos(theta)*N_rotor^2 + M + m - m*cos(theta)^2))
 %  
+
 
