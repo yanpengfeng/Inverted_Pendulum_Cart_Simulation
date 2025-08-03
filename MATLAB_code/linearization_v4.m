@@ -1,8 +1,11 @@
 clear all
+%定义符号变量，如下所示
 syms theta M m l u x_dot theta_dot x Kv Kt Rw I_rotor N_rotor g r_pulley
 
 
+%取得位移，角度及其各自的导数：位移导数为速度，角度导数为角速度
 q = [x; theta; x_dot; theta_dot];
+%导数变量取得
 dq = [x_dot; theta_dot];
 
 % Non-linear System Dynamics
@@ -12,14 +15,16 @@ dq = [x_dot; theta_dot];
 % Ge = [-g*sin(theta);    0];
 % Be = [alpha;    0];
 
+%转动惯量？
 J_rotor = [I_rotor * r_pulley^2*N_rotor^2    0;
             0                   0];
- 
+% 暂时不知道什么意思
 B_damp = [Kv*Kt/Rw*N_rotor^2    0;
             0                   0];
 
         
-% Computing double derivative of q 
+% Computing double derivative of q
+%计算q的双导数
 ddq = (De + J_rotor) \ (Be * u - Ce - B_damp * dq - Ge);
 
 
@@ -47,6 +52,7 @@ u_eq = 0;
 
 lin_x_dot = [dq; ddq];
 
+%将其中的sin和cos替换成1和theta,实现系统的线性化
 lin_x_dot_2 = subs(lin_x_dot, [cos(theta), sin(theta)], [1, sym(theta)]);
 
 
@@ -84,3 +90,4 @@ dxdt = q_eq + A_lin * (q - q_eq) + B_lin * (u - u_eq);
 %                                                                                                 (r*m*cos(theta))/(I_rotor*m*cos(theta)*N_rotor^2 + M + m - m*cos(theta)^2) - x*((r*Rw*m*sin(theta) + Rw*l*m*cos(theta) - Rw*g*m*cos(theta)^2 + Rw*g*m*sin(theta)^2 - Kt*Kv*N_rotor^2*m*x_dot*sin(theta))/(Rw*(I_rotor*m*cos(theta)*N_rotor^2 + M + m - m*cos(theta)^2)) + ((- I_rotor*m*sin(theta)*N_rotor^2 + 2*m*cos(theta)*sin(theta))*(- Kt*Kv*m*x_dot*cos(theta)*N_rotor^2 + r*Rw*m*cos(theta) - Rw*l*m*sin(theta) + Rw*g*m*cos(theta)*sin(theta)))/(Rw*(I_rotor*m*cos(theta)*N_rotor^2 + M + m - m*cos(theta)^2)^2)) - (Kt*Kv*N_rotor^2*m*x*cos(theta))/(Rw*(I_rotor*m*cos(theta)*N_rotor^2 + M + m - m*cos(theta)^2))
 %  x*((M*Rw*g*cos(theta) + Rw*g*m*cos(theta) - Rw*l*m*cos(theta)^2 + Rw*l*m*sin(theta)^2 + I_rotor*N_rotor^2*Rw*l*m*cos(theta))/(Rw*l*(I_rotor*m*cos(theta)*N_rotor^2 + M + m - m*cos(theta)^2)) - ((- I_rotor*m*sin(theta)*N_rotor^2 + 2*m*cos(theta)*sin(theta))*(r*M*Rw + r*Rw*m + M*Rw*g*sin(theta) + Rw*g*m*sin(theta) - Rw*l*m*cos(theta)*sin(theta) - Kt*Kv*M*N_rotor^2*x_dot - Kt*Kv*N_rotor^2*m*x_dot + I_rotor*N_rotor^2*Rw*l*m*sin(theta)))/(Rw*l*(I_rotor*m*cos(theta)*N_rotor^2 + M + m - m*cos(theta)^2)^2)) + (r*(Rw*m + M*Rw))/(Rw*l*(I_rotor*m*cos(theta)*N_rotor^2 + M + m - m*cos(theta)^2)) - (x*(Kt*Kv*N_rotor^2*m + Kt*Kv*M*N_rotor^2))/(Rw*l*(I_rotor*m*cos(theta)*N_rotor^2 + M + m - m*cos(theta)^2))
 %  
+
