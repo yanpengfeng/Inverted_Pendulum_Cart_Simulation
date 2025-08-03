@@ -1,6 +1,7 @@
 function [K, Nbar, r_new] = lqr_controller(X,x_desired,p)
 % Computes the necessary LQR controller parameters such as gains (K),
-% precompensator (Nbar), and reference signal (r) 
+% precompensator (Nbar), and reference signal (r)
+%预补偿器和参考信号
 global Nbar_array K_array
 
 %% Defining Linear System of Cart-Pole System
@@ -26,6 +27,7 @@ Nbar = -31.6228;
 % Nbar is computed using the two command lines below. Nbar does not change,
 % so the constant is explicitly defined to save computation time.
 % sys_ss = ss(A,B,C,D);
+%对数据进行归一化处理，获得预补偿器参数
 % Nbar = rscale(sys_ss, K);
 
 % Saturating motor voltage to 12V,-12V
@@ -35,10 +37,12 @@ input_voltage = r * Nbar - K * X;
 
 
 if p.saturate_motor == 1
+   %获得限幅信号
    r_new = saturate_voltage(input_voltage, p, K, Nbar, X);
 elseif p.saturate_motor == 0
    r_new = r; 
 end
+
 
 
 
