@@ -1,5 +1,7 @@
 function u = mpc_controller(X,x_desired,p)
+    %关闭预测工具箱
     mpcverbosity('off');
+    %拼接数组
     r = [x_desired; 0];
     
     [A,B,C,D] = compute_cart_pole_linear_system(X,x_desired,p);
@@ -9,6 +11,7 @@ function u = mpc_controller(X,x_desired,p)
     prediction_horizon = 100; % prediction horizon
     control_horizon = 2; % control horizon 
     
+    %设计了一个mpc控制器
     mpc_obj = mpc(plant, ts,prediction_horizon,control_horizon,[]);
     
     mpc_obj.mv.Min = -12; % measured variable (i.e., motor voltage)
@@ -44,10 +47,12 @@ function u = mpc_controller(X,x_desired,p)
     for i = 1:N
         % simulated plant and predictive model are identical
         y(i,:) = x.Plant;
+        %计算最优控制并更新mpc控制器状态
         u(i) = mpcmove(mpc_obj,x,y(i,1:2),r);
     end
     
     plot(t, y(:,1)) 
+
 
 
 end
