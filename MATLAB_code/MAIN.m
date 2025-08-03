@@ -35,27 +35,34 @@ p.saturate_motor = 1;
 % --- initialization ---
 % Initialize the system states, time (sec), desired cart position (m) 
 % states: cart position, pole angle, cart speed, pole angular speed)
+%初始化为零参数
 ic = [0, 0, 0, 0];
 
+%开始和终止时间，预期位置
 tstart = 0;
 tfinal = 25;
 x_desired = 0.5;
 
 % --- definition of simulation parameters -- 
 tout = tstart;
-Xout = ic;
+%位置状态等于初始状态
+Xout = ic;%1*4矩阵
 
 
 % --- starting simulation using ode45 --- 
-if p.flag_ctrl == 0 || p.flag_ctrl == 1
+if p.flag_ctrl == 0 || p.flag_ctrl == 1 %采取lqr控制器或者pid控制器
+    %记录时间
     tic;
-    [t,X] = ode45(@(t,X)compute_dyn_cart_pole(t, X, x_desired, p),[tstart, tfinal], Xout); 
+    %求解一阶微分方程组，解得时间和位置参数
+    [t,X] = ode45(@(t,X)compute_dyn_cart_pole(t, X, x_desired, p),[tstart, tfinal], Xout);
+    %结束计时
     toc;
     nt = length(t);
-    tout = [tout;t(2:nt)];
-    Xout = [Xout;X(2:nt,:)];
+    tout = [tout;t(2:nt)];%大小未知
+    Xout = [Xout;X(2:nt,:)];%取得除了初始时刻的状态，nt*4矩阵
 
 elseif p.flag_ctrl == 2
+    %设计mpc控制器，把以下参数取出来
     [m, g, r_pulley, M, l, Kv, Kt, Rw, I_rotor, N_rotor] = set_parameters(p);
     r = 0.5;
     X = [0;0;0;0];
@@ -64,27 +71,30 @@ elseif p.flag_ctrl == 2
     load('mpc_v2.mat');
     ref = [x_desired; 0];
     tic;
+    %运行仿真模型，终止时间如上设置
     simOut = sim('inverted_pend_2.slx',tfinal);
     toc;
-    tout = simOut.tout;
+    tout = simOut.tout; %行向量
     Xout = zeros(length(tout),2);
     for i_state = 1:4
-        Xout(:,i_state) = simOut.Xout(:,i_state);
+        %数据刷新
+        Xout(:,i_state) = simOut.Xout(:,i_state); %length(tout)*4矩阵，获得状态
 %         Xout(:,i_state) = simOut.Xout(:,i_state);
 
     end
     
     Uout = simOut.Uout;
     pad = zeros(length(tout) - length(Uout),1);
-    Uout = [Uout; pad];
+    Uout = [Uout; pad]; %length(tout)*1矩阵，获得输出
     
 end
 %%
 
 desired_trajectory = [x_desired * ones(length(tout),1),...
-zeros(length(tout),1)];     %[desired cart position, desired pole angle]
+zeros(length(tout),1)];     %[desired cart position, desired pole angle]，期望的小车位置和期望的摆杆角度
 
 
+%获得相关参数
 x = Xout(:,1);
 theta = Xout(:,2);
 x_dot = Xout(:,3);
@@ -137,6 +147,7 @@ cot(4) = compute_cot(avg_power, x_desired, t_settle(4), p);
 
 % --- plotting response and control effort --- 
 plot_output(tout,x_desired, Xout, Uout, t_settle);
+
 
 
 
