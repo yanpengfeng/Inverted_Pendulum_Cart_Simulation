@@ -59,19 +59,20 @@ function [Et, Ex] = even_sample(t, x, Fs, type)
 if nargin < 4, type = 'linear'; end
 
 
-
+%对时间t求导
 dt = diff(t);
-
+%获得导数是否为零，确保其不为零
 dt = dt + (dt==0)*1e-5;
-
+%时间取值未知从何而来，相当于对时间添加偏移量？
 t = [t(1);t(1)+cumsum(dt)];
 
 
 
 % Obtain the process related parameters
 
+%取得状态值的列数
 N = size(x, 2);    % number of signals to be interpolated
-
+%取得时间的行数
 M = size(t, 1);    % Number of samples provided
 
 t0 = t(1,1);       % Initial time
@@ -81,7 +82,7 @@ tf = t(M,1);       % Final time
 EM = (tf-t0)*Fs;   % Number of samples in the evenly sampled case with
 
                    % the specified sampling frequency
-
+%对结果进行四舍五入,生成一个等间距数值的向量
 Et = linspace(t0, tf, round(EM))';
 
 
@@ -92,6 +93,8 @@ Et = linspace(t0, tf, round(EM))';
 
 for s = 1:N,
 
+  %获得差值后的连续状态函数
   Ex(:,s) = interp1(t(:,1), x(:,s), Et(:,1),type); 
+
 
 end;
